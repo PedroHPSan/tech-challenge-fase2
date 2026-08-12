@@ -1,0 +1,17 @@
+# Ambiente e segredos
+.env
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# Dados e artefatos de modelo
+data/raw/
+data/processed/
+models/
+
+# Sistema
+.DS_Store
