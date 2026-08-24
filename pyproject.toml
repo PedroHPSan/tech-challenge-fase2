@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "techchallenge-fase2"
+version = "0.1.0"
+description = "Pipeline de MLOps para classificação de propensão de compra em e-commerce"
+authors = ["Pedro Santos <pedropalhetasantos@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+pandas = ">=2.2"
+numpy = ">=1.26"
+scikit-learn = ">=1.5"
+mlflow = ">=2.16,<3"
+dvc = ">=3.50"
+pydantic-settings = ">=2.4"
+pyyaml = ">=6.0"
+matplotlib = ">=3.8"
+joblib = ">=1.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0"
+ruff = ">=0.5"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
