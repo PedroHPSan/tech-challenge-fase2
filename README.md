@@ -75,7 +75,7 @@ poetry run python -m scripts.download_dataset
 
 O script baixa o CSV direto do repositório da UCI para
 `data/raw/online_shoppers_intention.csv`. Se o arquivo já existir, não faz nada.
-Quem já tem acesso ao remote pode simplesmente usar `dvc pull`.
+Quem já tem os dados no remote pode simplesmente usar `dvc pull`.
 
 ### Rodar o pipeline
 
@@ -105,48 +105,40 @@ poetry run dvc metrics show    # métricas da última execução
 poetry run dvc dag             # visualiza o grafo do pipeline
 ```
 
-### Remote: Google Drive
+### Remote: pasta local
 
-O remote padrão é uma pasta no Google Drive, configurada em `.dvc/config`
-(versionado). As credenciais **nunca** vão para o Git — ficam em
-`.dvc/config.local`, que está no `.gitignore` do próprio DVC.
+O remote padrão é uma pasta **fora do repositório**, declarada em `.dvc/config`
+(versionado) com caminho relativo:
 
-Configuração inicial, uma vez por pessoa do grupo:
-
-A pasta do projeto já está apontada no `.dvc/config`:
-<https://drive.google.com/drive/folders/1MIoZ5pr_6IlQyg_pUoK003O6TFJveu1m>
-
-```bash
-# 1. Peça ao responsável acesso de Editor à pasta acima (necessário para push;
-#    acesso de Leitor basta para quem só vai rodar `dvc pull`).
-
-# 2. Na primeira sincronização o DVC abre o navegador para você autorizar
-#    o acesso com sua conta Google. O token fica só na sua máquina.
-poetry run dvc pull
+```
+../../dvc-storage/techchallenge-fase2
 ```
 
-> As credenciais OAuth são gravadas localmente pelo DVC e não são commitadas.
-> Se o grupo preferir uma app OAuth própria (recomendado para evitar limites de
-> cota do cliente padrão), grave o ID e o segredo em `.dvc/config.local`:
-> `dvc remote modify --local gdrive gdrive_client_id <ID>` e
-> `dvc remote modify --local gdrive gdrive_client_secret <SECRET>`.
+Ou seja, `dvc-storage/` fica ao lado da pasta do projeto. Como o caminho é
+relativo, **funciona na máquina de qualquer pessoa do grupo sem configuração
+nenhuma** — basta clonar o repositório e rodar `dvc pull`.
 
-### Remote alternativo: pasta local
+```
+Projetos/
+├── tech-challenge-fase2/     # este repositório
+└── dvc-storage/              # remote do DVC (criado automaticamente)
+    └── techchallenge-fase2/
+```
 
-Para trabalhar offline, em CI ou dentro do container, há um remote `localstore`
-apontando para uma pasta fora do repositório (configurado em `.dvc/config.local`,
-por máquina, a partir de `DVC_REMOTE_PATH` no `.env`):
+Para usar outro caminho (um HD externo, uma pasta sincronizada em nuvem, um
+volume montado no container), sobrescreva **localmente**, sem afetar o grupo:
 
 ```bash
-poetry run dvc remote add --local localstore "$DVC_REMOTE_PATH"
-poetry run dvc push -r localstore
+poetry run dvc remote modify --local localstore url "$DVC_REMOTE_PATH"
 ```
+
+Isso grava em `.dvc/config.local`, que não é versionado.
 
 ### Comandos do dia a dia
 
 ```bash
 poetry run dvc status    # o que está fora de sincronia
-poetry run dvc push      # envia os dados para o remote padrão (Google Drive)
+poetry run dvc push      # envia os dados para o remote
 poetry run dvc pull      # traz os dados do remote
 ```
 

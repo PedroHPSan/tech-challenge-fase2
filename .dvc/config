@@ -1,4 +1,4 @@
 [core]
-    remote = gdrive
-['remote "gdrive"']
-    url = gdrive://1MIoZ5pr_6IlQyg_pUoK003O6TFJveu1m
+    remote = localstore
+['remote "localstore"']
+    url = ../../dvc-storage/techchallenge-fase2
