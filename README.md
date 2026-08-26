@@ -113,14 +113,15 @@ O remote padrão é uma pasta no Google Drive, configurada em `.dvc/config`
 
 Configuração inicial, uma vez por pessoa do grupo:
 
+A pasta do projeto já está apontada no `.dvc/config`:
+<https://drive.google.com/drive/folders/1MIoZ5pr_6IlQyg_pUoK003O6TFJveu1m>
+
 ```bash
-# 1. Peça acesso de Editor à pasta do Drive do projeto e copie o ID da pasta
-#    (é o trecho final da URL: https://drive.google.com/drive/folders/<ID>)
+# 1. Peça ao responsável acesso de Editor à pasta acima (necessário para push;
+#    acesso de Leitor basta para quem só vai rodar `dvc pull`).
 
-# 2. Aponte o remote para a pasta (apenas quem for alterar o padrão do repo)
-poetry run dvc remote modify gdrive url gdrive://<ID_DA_PASTA>
-
-# 3. Na primeira sincronização o DVC abre o navegador para autorizar
+# 2. Na primeira sincronização o DVC abre o navegador para você autorizar
+#    o acesso com sua conta Google. O token fica só na sua máquina.
 poetry run dvc pull
 ```
 
