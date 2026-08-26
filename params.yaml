@@ -1,0 +1,18 @@
+# Parâmetros do pipeline DVC.
+# Alterar qualquer valor aqui invalida o cache do estágio correspondente
+# e faz o `dvc repro` reexecutá-lo.
+
+# Seed global — garante reprodutibilidade de split e treinamento.
+seed: 42
+
+preprocess:
+  # Proporção do dataset reservada para teste.
+  test_size: 0.2
+
+train:
+  # Hiperparâmetros do classificador (Regressão Logística de baseline).
+  # O Membro 5 substitui/estende este bloco ao trocar o modelo.
+  model: logistic_regression
+  max_iter: 1000
+  C: 1.0
+  class_weight: balanced

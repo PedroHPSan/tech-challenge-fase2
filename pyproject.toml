@@ -17,6 +17,7 @@ pydantic-settings = ">=2.4"
 pyyaml = ">=6.0"
 matplotlib = ">=3.8"
 joblib = ">=1.4"
+dvc-gdrive = "^3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0"

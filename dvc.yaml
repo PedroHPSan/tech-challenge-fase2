@@ -1,0 +1,38 @@
+# Pipeline reprodutível: preprocess -> train
+# Execute com `dvc repro`. O DVC só reexecuta um estágio quando suas
+# dependências (código, dados ou parâmetros) mudam.
+
+stages:
+  preprocess:
+    desc: Limpa o dataset bruto e gera os splits estratificados de treino/teste.
+    cmd: python -m src.preprocess
+    deps:
+      - data/raw/online_shoppers_intention.csv
+      - src/preprocess.py
+      - src/config.py
+      - src/params.py
+    params:
+      - seed
+      - preprocess.test_size
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    desc: Treina o classificador de propensão de compra e avalia no split de teste.
+    cmd: python -m src.train
+    deps:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - src/train.py
+      - src/features.py
+      - src/config.py
+      - src/params.py
+    params:
+      - seed
+      - train
+    outs:
+      - models/model.pkl
+    metrics:
+      - metrics/metrics.json:
+          cache: false

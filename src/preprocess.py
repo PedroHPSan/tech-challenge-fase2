@@ -6,9 +6,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from src.config import DATA_PROCESSED_DIR, DATA_RAW_PATH, SEED
+from src.params import get_stage_params
 
 TARGET_COLUMN = "Revenue"
-TEST_SIZE = 0.2
+TEST_SIZE = float(get_stage_params("preprocess").get("test_size", 0.2))
 
 
 def load_raw_data(path: Path = DATA_RAW_PATH) -> pd.DataFrame:

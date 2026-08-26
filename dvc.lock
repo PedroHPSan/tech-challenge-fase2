@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python -m src.preprocess
+    deps:
+    - path: data/raw/online_shoppers_intention.csv
+      hash: md5
+      md5: cc6ec1db03b4f10f8de52c56ff48b085
+      size: 1072063
+    - path: src/config.py
+      hash: md5
+      md5: 9479e3663ea56d87403597d35ed41a8a
+      size: 951
+    - path: src/params.py
+      hash: md5
+      md5: 4cedc62b74c3fef876d94aa3c0fa75ae
+      size: 653
+    - path: src/preprocess.py
+      hash: md5
+      md5: b3ec206d6af0d4da8f6f774bcc4dacee
+      size: 1964
+    params:
+      params.yaml:
+        preprocess.test_size: 0.2
+        seed: 42
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 4054b7fed9e09e4f7b5fafbee6f88b6c
+      size: 222965
+    - path: data/processed/train.csv
+      hash: md5
+      md5: d885112fda67d641fe2d239e15dd32ae
+      size: 890055
+  train:
+    cmd: python -m src.train
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 4054b7fed9e09e4f7b5fafbee6f88b6c
+      size: 222965
+    - path: data/processed/train.csv
+      hash: md5
+      md5: d885112fda67d641fe2d239e15dd32ae
+      size: 890055
+    - path: src/config.py
+      hash: md5
+      md5: 9479e3663ea56d87403597d35ed41a8a
+      size: 951
+    - path: src/features.py
+      hash: md5
+      md5: 76ab9b9b8870aa58fd3d13044463e943
+      size: 1226
+    - path: src/params.py
+      hash: md5
+      md5: 4cedc62b74c3fef876d94aa3c0fa75ae
+      size: 653
+    - path: src/train.py
+      hash: md5
+      md5: 409974da067ad79b51d4b99f70534391
+      size: 2971
+    params:
+      params.yaml:
+        seed: 42
+        train:
+          model: logistic_regression
+          max_iter: 1000
+          C: 1.0
+          class_weight: balanced
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: b380781b0847814d3c7c52febd537cce
+      size: 131
+    - path: models/model.pkl
+      hash: md5
+      md5: 37c7b4a3b02607e8c49f624e4ca809c3
+      size: 4817

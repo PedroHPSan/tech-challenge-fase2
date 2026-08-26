@@ -4,6 +4,8 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.params import load_params
+
 
 class Settings(BaseSettings):
     """Configurações de infraestrutura da aplicação."""
@@ -24,4 +26,6 @@ DATA_PROCESSED_DIR = Path("data/processed")
 MODELS_DIR = Path("models")
 METRICS_DIR = Path("metrics")
 
-SEED = settings.seed
+# params.yaml é a fonte de verdade para o DVC (que rastreia o arquivo e
+# invalida o cache quando ele muda); o .env permanece como fallback.
+SEED = int(load_params().get("seed", settings.seed))

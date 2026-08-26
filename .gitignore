@@ -8,10 +8,14 @@ __pycache__/
 .ruff_cache/
 .venv/
 
-# Dados e artefatos de modelo
-data/raw/
-data/processed/
-models/
+# Dados e artefatos gerenciados pelo DVC
+# Os arquivos em si ficam fora do Git; os ponteiros (.dvc, dvc.lock) são
+# versionados. O DVC gera os próprios .gitignore dentro de data/ e models/.
+/data/processed/
+/models/
+
+# MLflow local
+mlruns/
 
 # Sistema
 .DS_Store
