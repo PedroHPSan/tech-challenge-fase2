@@ -1,0 +1,30 @@
+# Controle de versão e metadados locais
+.git/
+.agents/
+.codex/
+
+# Ambiente e caches Python
+.env
+.venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Cache e estado local do DVC; configuração e ponteiros permanecem no contexto
+.dvc/cache/
+.dvc/tmp/
+.dvc/config.local
+
+# Dados e artefatos gerados pelo pipeline
+data/raw/*.csv
+data/processed/
+models/
+metrics/
+mlruns/
+
+# Arquivos de desenvolvimento sem uso na imagem de execução
+tests/

@@ -158,3 +158,33 @@ poetry run ruff check src/
 # Testes unitários
 poetry run pytest
 ```
+
+## Execução com Docker
+
+Construa a imagem a partir da raiz do repositório:
+
+```bash
+docker build -t techchallenge-fase2 .
+```
+
+Execute o pipeline completo:
+
+```bash
+docker run --rm techchallenge-fase2
+```
+
+O comando padrão baixa o dataset diretamente da UCI e executa `dvc repro`; ele
+não depende do remote DVC local.
+
+Para manter o modelo e as métricas após a remoção do container, use volumes
+nomeados:
+
+```bash
+docker volume create techchallenge-models
+docker volume create techchallenge-metrics
+
+docker run --rm \
+  --mount type=volume,source=techchallenge-models,target=/app/models \
+  --mount type=volume,source=techchallenge-metrics,target=/app/metrics \
+  techchallenge-fase2
+```
