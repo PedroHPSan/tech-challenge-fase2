@@ -25,6 +25,8 @@ data/processed/
 models/
 metrics/
 mlruns/
+mlflow.db
+mlartifacts/
 
 # Arquivos de desenvolvimento sem uso na imagem de execução
 tests/

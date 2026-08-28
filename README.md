@@ -159,6 +159,38 @@ poetry run ruff check src/
 poetry run pytest
 ```
 
+## Modelagem e MLflow
+
+O estágio `train` executa três experimentos reproduzíveis: uma Regressão
+Logística de baseline e duas configurações de Random Forest. A seleção do
+campeão usa o F1 médio de validação cruzada estratificada; o split de teste é
+usado somente para a avaliação final.
+
+Para habilitar o Model Registry, copie `.env.example` para `.env` e inicie
+o servidor em outro terminal:
+
+```bash
+poetry run mlflow server \
+  --backend-store-uri sqlite:///mlflow.db \
+  --default-artifact-root ./mlartifacts \
+  --host 0.0.0.0 \
+  --port 5000
+```
+
+Com o servidor disponível em `http://localhost:5000`, execute:
+
+```bash
+poetry run dvc repro
+```
+
+Cada run registra hiperparâmetros, seed, métricas de validação cruzada e teste,
+pipeline completo, assinatura, exemplo de entrada, matriz de confusão, curva
+ROC, curva Precision-Recall e relatório de classificação. A melhor run cria
+uma versão de `PurchasePropensityClassifier` com o alias `champion`.
+
+Sem `MLFLOW_TRACKING_URI`, as runs continuam sendo gravadas localmente em
+`mlruns/`, mas o registro do campeão é ignorado.
+
 ## Execução com Docker
 
 Construa a imagem a partir da raiz do repositório:

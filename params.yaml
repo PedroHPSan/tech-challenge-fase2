@@ -1,18 +1,41 @@
 # Parâmetros do pipeline DVC.
-# Alterar qualquer valor aqui invalida o cache do estágio correspondente
-# e faz o `dvc repro` reexecutá-lo.
+# Alterar qualquer valor aqui invalida o cache do estágio correspondente.
 
-# Seed global — garante reprodutibilidade de split e treinamento.
+# Seed global para split, validação cruzada e treinamento.
 seed: 42
 
 preprocess:
-  # Proporção do dataset reservada para teste.
+  # Proporção do dataset reservada exclusivamente para teste.
   test_size: 0.2
 
 train:
-  # Hiperparâmetros do classificador (Regressão Logística de baseline).
-  # O Membro 5 substitui/estende este bloco ao trocar o modelo.
-  model: logistic_regression
-  max_iter: 1000
-  C: 1.0
-  class_weight: balanced
+  experiment_name: purchase-propensity
+  registered_model_name: PurchasePropensityClassifier
+  register_champion: true
+  selection_metric: cv_f1_mean
+  cv_folds: 5
+
+  # Cada candidato gera uma run independente no MLflow.
+  candidates:
+    - name: logistic-regression-baseline
+      estimator: logistic_regression
+      params:
+        max_iter: 1000
+        C: 1.0
+        class_weight: balanced
+
+    - name: random-forest-balanced
+      estimator: random_forest
+      params:
+        n_estimators: 300
+        max_depth: 10
+        min_samples_leaf: 2
+        class_weight: balanced
+
+    - name: random-forest-deep
+      estimator: random_forest
+      params:
+        n_estimators: 400
+        max_depth: 16
+        min_samples_leaf: 1
+        class_weight: balanced_subsample

@@ -9,16 +9,16 @@ stages:
       size: 1072063
     - path: src/config.py
       hash: md5
-      md5: 9479e3663ea56d87403597d35ed41a8a
-      size: 951
+      md5: e44981ffff13c87296f486f179265524
+      size: 920
     - path: src/params.py
       hash: md5
-      md5: ab8a1151b3e2a53adf240ecaa51e3ce9
-      size: 674
+      md5: 4cedc62b74c3fef876d94aa3c0fa75ae
+      size: 653
     - path: src/preprocess.py
       hash: md5
-      md5: b3ec206d6af0d4da8f6f774bcc4dacee
-      size: 1964
+      md5: 5738107789ddc94b40968db2e388e8ac
+      size: 1906
     params:
       params.yaml:
         preprocess.test_size: 0.2
@@ -26,53 +26,87 @@ stages:
     outs:
     - path: data/processed/test.csv
       hash: md5
-      md5: 4054b7fed9e09e4f7b5fafbee6f88b6c
-      size: 222965
+      md5: 32c5b742a4e489a88b9a7b54d20c8272
+      size: 220523
     - path: data/processed/train.csv
       hash: md5
-      md5: d885112fda67d641fe2d239e15dd32ae
-      size: 890055
+      md5: c20d42f19376d4f2953aceb57f368da6
+      size: 880290
   train:
     cmd: python -m src.train
     deps:
     - path: data/processed/test.csv
       hash: md5
-      md5: 4054b7fed9e09e4f7b5fafbee6f88b6c
-      size: 222965
+      md5: 32c5b742a4e489a88b9a7b54d20c8272
+      size: 220523
     - path: data/processed/train.csv
       hash: md5
-      md5: d885112fda67d641fe2d239e15dd32ae
-      size: 890055
+      md5: c20d42f19376d4f2953aceb57f368da6
+      size: 880290
     - path: src/config.py
       hash: md5
-      md5: 9479e3663ea56d87403597d35ed41a8a
-      size: 951
+      md5: e44981ffff13c87296f486f179265524
+      size: 920
+    - path: src/evaluation.py
+      hash: md5
+      md5: 7e4840f66638ea885a8512b9bfd7905d
+      size: 2967
     - path: src/features.py
       hash: md5
-      md5: 76ab9b9b8870aa58fd3d13044463e943
-      size: 1226
+      md5: d3d14ea48dad3eb98810b6b0ab0c51d2
+      size: 1192
+    - path: src/models.py
+      hash: md5
+      md5: d7c9354ec67529dcfad2bb81c3400893
+      size: 2763
     - path: src/params.py
       hash: md5
-      md5: ab8a1151b3e2a53adf240ecaa51e3ce9
-      size: 674
+      md5: 4cedc62b74c3fef876d94aa3c0fa75ae
+      size: 653
+    - path: src/tracking.py
+      hash: md5
+      md5: 9c66b966e7e7dcd5656ded93033f8092
+      size: 2602
     - path: src/train.py
       hash: md5
-      md5: 3ecb383c47a0b6817f4864741943921a
-      size: 3051
+      md5: 408b8711ffcdb0a575469336cececf18
+      size: 4873
     params:
       params.yaml:
         seed: 42
         train:
-          model: logistic_regression
-          max_iter: 1000
-          C: 1.0
-          class_weight: balanced
+          experiment_name: purchase-propensity
+          registered_model_name: PurchasePropensityClassifier
+          register_champion: true
+          selection_metric: cv_f1_mean
+          cv_folds: 5
+          candidates:
+          - name: logistic-regression-baseline
+            estimator: logistic_regression
+            params:
+              max_iter: 1000
+              C: 1.0
+              class_weight: balanced
+          - name: random-forest-balanced
+            estimator: random_forest
+            params:
+              n_estimators: 300
+              max_depth: 10
+              min_samples_leaf: 2
+              class_weight: balanced
+          - name: random-forest-deep
+            estimator: random_forest
+            params:
+              n_estimators: 400
+              max_depth: 16
+              min_samples_leaf: 1
+              class_weight: balanced_subsample
     outs:
     - path: metrics/metrics.json
       hash: md5
-      md5: b380781b0847814d3c7c52febd537cce
-      size: 131
+      md5: d2da9a27dc04a1bfde576a1d0969d907
+      size: 446
     - path: models/model.pkl
       hash: md5
-      md5: 37c7b4a3b02607e8c49f624e4ca809c3
-      size: 4817
+      md5: 30ec009bfc5fcb053b9278513447f916
+      size: 11929106
