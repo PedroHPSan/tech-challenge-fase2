@@ -220,3 +220,7 @@ docker run --rm \
   --mount type=volume,source=techchallenge-metrics,target=/app/metrics \
   techchallenge-fase2
 ```
+
+## Vídeo de apresentação (método STAR)
+
+Link: https://drive.google.com/file/d/1s2JIgDnaw7IG7O9ajA_WYrVqnnNkVbYT/view?usp=sharing
